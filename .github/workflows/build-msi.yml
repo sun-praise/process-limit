@@ -22,6 +22,11 @@ jobs:
       - name: Install WiX v4
         run: dotnet tool install --global wix --version 4.*
 
+      - name: Install WiX extensions
+        run: |
+          wix extension add WixToolset.UI.wixext/4.*
+          wix extension add WixToolset.Util.wixext/4.*
+
       - name: Publish application
         run: dotnet publish ProcessLimit.csproj -c Release -r win-x64 --self-contained -o publish -p:PublishSingleFile=false
 
@@ -34,10 +39,7 @@ jobs:
           echo "version=$ver" >> $env:GITHUB_OUTPUT
 
       - name: Build MSI
-        run: |
-          wix build Setup.wxs -o ProcessLimit-${{ steps.version.outputs.version }}.msi -d Version=${{ steps.version.outputs.version }}
-        env:
-          WIX_EXTENSIONS: WixToolset.UI.wixext WixToolset.Util.wixext
+        run: wix build Setup.wxs -o ProcessLimit-${{ steps.version.outputs.version }}.msi -d Version=${{ steps.version.outputs.version }}
 
       - name: Upload MSI to release
         uses: softprops/action-gh-release@v2
