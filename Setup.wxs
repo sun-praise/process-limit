@@ -8,38 +8,29 @@
     Scope="perMachine">
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of ProcessLimit is already installed." />
-
     <MediaTemplate EmbedCab="yes" />
 
     <StandardDirectory Id="ProgramFilesFolder">
       <Directory Id="INSTALLFOLDER" Name="ProcessLimit">
-        <Component Guid="A1B2C3D4-E5F6-7890-ABCD-EF1234567890">
+        <Component Id="MainExe" Guid="A1B2C3D4-E5F6-7890-ABCD-EF1234567890">
           <File Id="ProcessLimitExe" Source="publish\ProcessLimit.exe" KeyPath="yes">
-            <Shortcut
-              Id="DesktopShortcut"
-              Directory="DesktopFolder"
-              Name="ProcessLimit"
-              Description="进程内存限制工具"
-              WorkingDirectory="INSTALLFOLDER"
-              Icon="AppIcon" />
-            <Shortcut
-              Id="StartMenuShortcut"
-              Directory="ProgramMenuFolder"
-              Name="ProcessLimit"
-              Description="进程内存限制工具"
-              WorkingDirectory="INSTALLFOLDER"
-              Icon="AppIcon" />
+            <Shortcut Id="DesktopShortcut" Directory="DesktopFolder" Name="ProcessLimit" Description="进程内存限制工具" WorkingDirectory="INSTALLFOLDER" Icon="AppIcon" />
+            <Shortcut Id="StartMenuShortcut" Directory="ProgramMenuFolder" Name="ProcessLimit" Description="进程内存限制工具" WorkingDirectory="INSTALLFOLDER" Icon="AppIcon" />
           </File>
         </Component>
-        <Component Guid="B2C3D4E5-F6A7-8901-BCDE-F23456789012">
-          <Files Include="publish\**" Exclude="publish\ProcessLimit.exe;publish\**\*.pdb" />
+        <Component Id="RuntimeFiles" Guid="B2C3D4E5-F6A7-8901-BCDE-F23456789012">
+          <Files Include="publish\*.dll" />
+        </Component>
+        <Component Id="RuntimeSubFiles" Guid="C3D4E5F6-A7B8-9012-CDEF-345678901234">
+          <Files Include="publish\runtimes\**" />
         </Component>
       </Directory>
     </StandardDirectory>
 
     <Feature Id="MainFeature" Title="ProcessLimit" Level="1">
-      <ComponentRef Id="ProcessLimitExe" />
-      <ComponentGroupRef Id="PublishedFiles" />
+      <ComponentRef Id="MainExe" />
+      <ComponentRef Id="RuntimeFiles" />
+      <ComponentRef Id="RuntimeSubFiles" />
     </Feature>
 
     <Icon Id="AppIcon" SourceFile="publish\ProcessLimit.exe" />
@@ -49,12 +40,9 @@
     <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
     <Property Id="WixShellExecTarget" Value="[#ProcessLimitExe]" />
     <CustomAction Id="LaunchApplication" BinaryRef="Wix4UtilCA_" DllEntry="WixShellExec" />
-
     <InstallExecuteSequence>
       <Custom Action="LaunchApplication" OnExit="success" Condition="WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1" />
     </InstallExecuteSequence>
-
-    <ComponentGroup Id="PublishedFiles" />
 
   </Package>
 </Wix>
