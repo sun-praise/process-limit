@@ -27,9 +27,6 @@ jobs:
           wix extension add --global WixToolset.UI.wixext/4.0.6
           wix extension add --global WixToolset.Util.wixext/4.0.6
 
-      - name: Publish application
-        run: dotnet publish ProcessLimit.csproj -c Release -r win-x64 --self-contained -o publish -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
-
       - name: Get version from tag
         id: version
         shell: pwsh
@@ -38,8 +35,17 @@ jobs:
           $ver = $tag -replace '^v', ''
           echo "version=$ver" >> $env:GITHUB_OUTPUT
 
-      - name: Build MSI
-        run: wix build Setup.wxs -o ProcessLimit-${{ steps.version.outputs.version }}.msi -d Version=${{ steps.version.outputs.version }} -ext WixToolset.UI.wixext -ext WixToolset.Util.wixext
+      - name: Publish self-contained
+        run: dotnet publish ProcessLimit.csproj -c Release -r win-x64 --self-contained -o publish-sc -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+
+      - name: Publish framework-dependent
+        run: dotnet publish ProcessLimit.csproj -c Release -r win-x64 --no-self-contained -o publish-fdd -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+
+      - name: Build MSI (self-contained)
+        run: wix build Setup.wxs -o ProcessLimit-${{ steps.version.outputs.version }}-self-contained.msi -d Version=${{ steps.version.outputs.version }} -d PublishDir=publish-sc -ext WixToolset.UI.wixext -ext WixToolset.Util.wixext
+
+      - name: Build MSI (framework-dependent)
+        run: wix build Setup.wxs -o ProcessLimit-${{ steps.version.outputs.version }}-framework-dependent.msi -d Version=${{ steps.version.outputs.version }} -d PublishDir=publish-fdd -ext WixToolset.UI.wixext -ext WixToolset.Util.wixext
 
       - name: Upload MSI to release
         uses: softprops/action-gh-release@v2

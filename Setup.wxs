@@ -17,7 +17,7 @@
 
     <ComponentGroup Id="AppFiles" Directory="INSTALLFOLDER">
       <Component Id="MainExe" Guid="A1B2C3D4-E5F6-7890-ABCD-EF1234567890">
-        <File Id="ProcessLimitExe" Source="publish\ProcessLimit.exe" KeyPath="yes">
+        <File Id="ProcessLimitExe" Source="$(var.PublishDir)\ProcessLimit.exe" KeyPath="yes">
           <Shortcut Id="DesktopShortcut" Directory="DesktopFolder" Name="ProcessLimit" Description="进程内存限制工具" WorkingDirectory="INSTALLFOLDER" Icon="AppIcon" />
           <Shortcut Id="StartMenuShortcut" Directory="ProgramMenuFolder" Name="ProcessLimit" Description="进程内存限制工具" WorkingDirectory="INSTALLFOLDER" Icon="AppIcon" />
         </File>
@@ -28,7 +28,7 @@
       <ComponentGroupRef Id="AppFiles" />
     </Feature>
 
-    <Icon Id="AppIcon" SourceFile="publish\ProcessLimit.exe" />
+    <Icon Id="AppIcon" SourceFile="$(var.PublishDir)\ProcessLimit.exe" />
 
     <ui:WixUI Id="WixUI_InstallDir" />
     <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch ProcessLimit" />
