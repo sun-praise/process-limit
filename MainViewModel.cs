@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using ProcessLimit.Helpers;
 using ProcessLimit.Models;
 using ProcessLimit.Services;
 
@@ -16,6 +17,18 @@ public class MainViewModel : INotifyPropertyChanged, IDisposable
     private ProcessInfo? _selectedProcess;
     private string _newRuleProcessName = string.Empty;
     private long _newRuleMemoryMB = 512;
+    private bool _isAutoStartEnabled;
+
+    public bool IsAutoStartEnabled
+    {
+        get => _isAutoStartEnabled;
+        set
+        {
+            _isAutoStartEnabled = value;
+            AutoStartHelper.SetAutoStart(value);
+            OnPropertyChanged();
+        }
+    }
 
     public ObservableCollection<ProcessInfo> Processes { get; } = new();
     public ObservableCollection<ProcessRule> Rules { get; } = new();

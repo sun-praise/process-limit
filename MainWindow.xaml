@@ -221,16 +221,24 @@
             </Grid>
         </Grid>
 
-        <!-- Memory Size Presets -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,8">
-            <TextBlock Text="快速设置内存上限：" VerticalAlignment="Center" Foreground="#666" FontSize="12"/>
-            <Button Content="256 MB" Click="SetMemoryPreset" Tag="256" Style="{StaticResource ActionBtn}" Padding="8,3" FontSize="11"/>
-            <Button Content="512 MB" Click="SetMemoryPreset" Tag="512" Style="{StaticResource ActionBtn}" Padding="8,3" FontSize="11"/>
-            <Button Content="1 GB" Click="SetMemoryPreset" Tag="1024" Style="{StaticResource ActionBtn}" Padding="8,3" FontSize="11"/>
-            <Button Content="2 GB" Click="SetMemoryPreset" Tag="2048" Style="{StaticResource ActionBtn}" Padding="8,3" FontSize="11"/>
-            <Button Content="4 GB" Click="SetMemoryPreset" Tag="4096" Style="{StaticResource ActionBtn}" Padding="8,3" FontSize="11"/>
-            <Button Content="8 GB" Click="SetMemoryPreset" Tag="8192" Style="{StaticResource ActionBtn}" Padding="8,3" FontSize="11"/>
-        </StackPanel>
+        <!-- Memory Size Presets & Settings -->
+        <Grid Grid.Row="2" Margin="0,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <TextBlock Text="快速设置内存上限：" VerticalAlignment="Center" Foreground="#666" FontSize="12"/>
+                <Button Content="256 MB" Click="SetMemoryPreset" Tag="256" Style="{StaticResource ActionBtn}" Padding="8,3" FontSize="11"/>
+                <Button Content="512 MB" Click="SetMemoryPreset" Tag="512" Style="{StaticResource ActionBtn}" Padding="8,3" FontSize="11"/>
+                <Button Content="1 GB" Click="SetMemoryPreset" Tag="1024" Style="{StaticResource ActionBtn}" Padding="8,3" FontSize="11"/>
+                <Button Content="2 GB" Click="SetMemoryPreset" Tag="2048" Style="{StaticResource ActionBtn}" Padding="8,3" FontSize="11"/>
+                <Button Content="4 GB" Click="SetMemoryPreset" Tag="4096" Style="{StaticResource ActionBtn}" Padding="8,3" FontSize="11"/>
+                <Button Content="8 GB" Click="SetMemoryPreset" Tag="8192" Style="{StaticResource ActionBtn}" Padding="8,3" FontSize="11"/>
+            </StackPanel>
+            <CheckBox Grid.Column="1" Content="开机自启" IsChecked="{Binding IsAutoStartEnabled}"
+                      VerticalAlignment="Center" FontSize="13" Margin="8,0,0,0" Cursor="Hand"/>
+        </Grid>
 
         <GridSplitter Grid.Row="2" VerticalAlignment="Bottom" Height="1" Background="#DDD" Margin="0,0,0,-1"/>
 

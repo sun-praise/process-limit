@@ -9,7 +9,7 @@ public class ProcessMonitorService : IDisposable
     private readonly ConfigService _configService;
     private readonly HashSet<int> _assignedPids = new();
     private readonly object _lock = new();
-    private Timer? _timer;
+    private System.Threading.Timer? _timer;
     private List<ProcessRule> _rules = new();
 
     public event Action<string>? OnLog;
@@ -23,7 +23,7 @@ public class ProcessMonitorService : IDisposable
     public void Start()
     {
         _rules = _configService.LoadRules();
-        _timer = new Timer(MonitorCallback, null, TimeSpan.Zero, TimeSpan.FromSeconds(3));
+        _timer = new System.Threading.Timer(MonitorCallback, null, TimeSpan.Zero, TimeSpan.FromSeconds(3));
         Log("监控服务已启动");
     }
 
