@@ -1,0 +1,60 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package
+    Name="ProcessLimit"
+    Manufacturer="sun-praise"
+    Version="$(var.Version)"
+    UpgradeCode="B7D2E3F4-5A6B-4C8D-9E0F-1A2B3C4D5E6F"
+    Scope="perMachine">
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of ProcessLimit is already installed." />
+
+    <MediaTemplate EmbedCab="yes" />
+
+    <StandardDirectory Id="ProgramFilesFolder">
+      <Directory Id="INSTALLFOLDER" Name="ProcessLimit" />
+    </Directory>
+
+    <Feature Id="MainFeature" Title="ProcessLimit" Level="1">
+      <ComponentGroupRef Id="PublishedFiles" />
+    </Feature>
+
+    <Component Directory="INSTALLFOLDER" Guid="A1B2C3D4-E5F6-7890-ABCD-EF1234567890">
+      <File Id="ProcessLimitExe" Source="publish\ProcessLimit.exe" KeyPath="yes">
+        <Shortcut
+          Id="DesktopShortcut"
+          Directory="DesktopFolder"
+          Name="ProcessLimit"
+          Description="进程内存限制工具"
+          WorkingDirectory="INSTALLFOLDER"
+          Icon="AppIcon" />
+        <Shortcut
+          Id="StartMenuShortcut"
+          Directory="ProgramMenuFolder"
+          Name="ProcessLimit"
+          Description="进程内存限制工具"
+          WorkingDirectory="INSTALLFOLDER"
+          Icon="AppIcon" />
+      </File>
+      <ProgId Id="ProcessLimit" Description="ProcessLimit Application" />
+    </Component>
+
+    <Icon Id="AppIcon" SourceFile="publish\ProcessLimit.exe" />
+
+    <UI>
+      <WixUI Id="WixUI_InstallDir" />
+      <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="LaunchApplication" Condition="WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1" />
+    </UI>
+
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch ProcessLimit" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
+    <CustomAction Id="LaunchApplication" BinaryRef="Wix4UtilCA" DllEntry="WixShellExec" />
+    <Property Id="WixShellExecTarget" Value="[#ProcessLimitExe]" />
+
+    <ComponentGroup Id="PublishedFiles" Directory="INSTALLFOLDER">
+      <Files Include="publish\**" Exclude="publish\ProcessLimit.exe">
+        <Exclude Files="publish\**\*.pdb" />
+      </Files>
+    </ComponentGroup>
+
+  </Package>
+</Wix>

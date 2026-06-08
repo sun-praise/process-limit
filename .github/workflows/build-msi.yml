@@ -1,0 +1,45 @@
+name: Build MSI Installer
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install WiX v4
+        run: dotnet tool install --global wix --version 4.*
+
+      - name: Publish application
+        run: dotnet publish ProcessLimit.csproj -c Release -r win-x64 --self-contained -o publish -p:PublishSingleFile=false
+
+      - name: Get version from tag
+        id: version
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $ver = $tag -replace '^v', ''
+          echo "version=$ver" >> $env:GITHUB_OUTPUT
+
+      - name: Build MSI
+        run: |
+          wix build Setup.wxs -o ProcessLimit-${{ steps.version.outputs.version }}.msi -d Version=${{ steps.version.outputs.version }}
+        env:
+          WIX_EXTENSIONS: WixToolset.UI.wixext WixToolset.Util.wixext
+
+      - name: Upload MSI to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: "*.msi"
