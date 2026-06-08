@@ -28,7 +28,7 @@ jobs:
           wix extension add --global WixToolset.Util.wixext/4.0.6
 
       - name: Publish application
-        run: dotnet publish ProcessLimit.csproj -c Release -r win-x64 --self-contained -o publish -p:PublishSingleFile=false
+        run: dotnet publish ProcessLimit.csproj -c Release -r win-x64 --self-contained -o publish -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
 
       - name: Get version from tag
         id: version
@@ -39,7 +39,7 @@ jobs:
           echo "version=$ver" >> $env:GITHUB_OUTPUT
 
       - name: Build MSI
-        run: wix build Setup.wxs -o ProcessLimit-${{ steps.version.outputs.version }}.msi -d Version=${{ steps.version.outputs.version }}
+        run: wix build Setup.wxs -o ProcessLimit-${{ steps.version.outputs.version }}.msi -d Version=${{ steps.version.outputs.version }} -ext WixToolset.UI.wixext -ext WixToolset.Util.wixext
 
       - name: Upload MSI to release
         uses: softprops/action-gh-release@v2

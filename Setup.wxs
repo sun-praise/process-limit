@@ -5,7 +5,8 @@
     Manufacturer="sun-praise"
     Version="$(Version)"
     UpgradeCode="B7D2E3F4-5A6B-4C8D-9E0F-1A2B3C4D5E6F"
-    Scope="perMachine">
+    Scope="perMachine"
+    Codepage="65001">
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of ProcessLimit is already installed." />
     <MediaTemplate EmbedCab="yes" />
@@ -21,9 +22,6 @@
           <Shortcut Id="StartMenuShortcut" Directory="ProgramMenuFolder" Name="ProcessLimit" Description="进程内存限制工具" WorkingDirectory="INSTALLFOLDER" Icon="AppIcon" />
         </File>
       </Component>
-      <Files Include="publish\*.dll" />
-      <Files Include="publish\*.json" />
-      <Files Include="publish\runtimes\**" />
     </ComponentGroup>
 
     <Feature Id="MainFeature" Title="ProcessLimit" Level="1">
@@ -35,11 +33,6 @@
     <ui:WixUI Id="WixUI_InstallDir" />
     <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch ProcessLimit" />
     <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
-    <Property Id="WixShellExecTarget" Value="[#ProcessLimitExe]" />
-    <CustomAction Id="LaunchApplication" BinaryRef="Wix4UtilCA_" DllEntry="WixShellExec" />
-    <InstallExecuteSequence>
-      <Custom Action="LaunchApplication" OnExit="success" Condition="WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1" />
-    </InstallExecuteSequence>
 
   </Package>
 </Wix>
