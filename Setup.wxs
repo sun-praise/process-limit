@@ -31,6 +31,7 @@
     <Icon Id="AppIcon" SourceFile="$(var.PublishDir)\ProcessLimit.exe" />
 
     <ui:WixUI Id="WixUI_InstallDir" />
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
     <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch ProcessLimit" />
     <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
 
