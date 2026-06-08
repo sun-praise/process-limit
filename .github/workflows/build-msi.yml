@@ -22,8 +22,10 @@ jobs:
       - name: Install WiX v4
         run: dotnet tool install --global wix --version 4.0.6
 
-      - name: Install WiX UI extension
-        run: wix extension add WixToolset.UI.wixext/4.0.6
+      - name: Install WiX extensions
+        run: |
+          wix extension add --global WixToolset.UI.wixext/4.0.6
+          wix extension add --global WixToolset.Util.wixext/4.0.6
 
       - name: Publish application
         run: dotnet publish ProcessLimit.csproj -c Release -r win-x64 --self-contained -o publish -p:PublishSingleFile=false
